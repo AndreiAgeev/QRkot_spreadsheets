@@ -130,3 +130,9 @@ dmypy.json
 
 # .idea
 .idea
+
+*schema.xlsx
+*schema.png
+fastapi*.db
+test.db
+.vscode/
