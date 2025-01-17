@@ -12,6 +12,8 @@ SCOPES = [
 if settings.credentials_file:
     INFO = json.load(open(settings.credentials_file))
 else:
+    # в случае ошибки при попытке создания таблицы,
+    # стоит добавить для параметра private_key метод replace('\\n', '\n')
     INFO = {
         'type': settings.type,
         'project_id': settings.project_id,
