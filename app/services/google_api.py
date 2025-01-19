@@ -3,12 +3,19 @@ from datetime import datetime
 from aiogoogle import Aiogoogle
 
 from app.core.config import settings
-from app.extra.constants import FORMAT
+from app.extra.constants import (
+    COLUMN_COUNT,
+    DRIVE_API_VERSION,
+    FORMAT,
+    ROW_COUNT,
+    SHEETS_API_VERSION,
+    SHEET_RANGE
+)
 
 
 async def spreadsheets_create(wrapper_service: Aiogoogle) -> str:
     current_time = datetime.now().strftime(FORMAT)
-    service = await wrapper_service.discover('sheets', 'v4')
+    service = await wrapper_service.discover('sheets', SHEETS_API_VERSION)
     spreadsheet_body = {
         'properties': {
             'title': f'Отчёт от {current_time}',
@@ -21,30 +28,13 @@ async def spreadsheets_create(wrapper_service: Aiogoogle) -> str:
                     'sheetId': 0,
                     'title': 'Текущие закрытые проекты',
                     'gridProperties': {
-                        'rowCount': 100,
-                        'columnCount': 3
+                        'rowCount': ROW_COUNT,
+                        'columnCount': COLUMN_COUNT
                     }
                 }
             }
         ]
     }
-    # spreadsheet_body = {
-    #     'properties': {
-    #         'title': f'Отчёт от {current_time}',
-    #         'locale': 'ru_RU'
-    #     },
-    #     'sheets': [{
-    #         'properties': {
-    #             'sheetType': 'GRID',
-    #             'sheetId': 0,
-    #             'title': 'Текущие закрытые проекты',
-    #             'gridProperties': {
-    #                 'rowCount': 100,
-    #                 'columnCount': 3
-    #             }
-    #         }
-    #     }]
-    # }
     response = await wrapper_service.as_service_account(
         service.spreadsheets.create(json=spreadsheet_body)
     )
@@ -55,7 +45,7 @@ async def set_user_permissions(
         spreadsheet_id: int,
         wrapper_service: Aiogoogle
 ) -> None:
-    service = await wrapper_service.discover('drive', 'v3')
+    service = await wrapper_service.discover('drive', DRIVE_API_VERSION)
     permission_body = {
         'type': 'user',
         'role': 'writer',
@@ -76,7 +66,7 @@ async def spreadsheets_update_value(
         wrapper_service: Aiogoogle
 ) -> None:
     current_time = datetime.now().strftime(FORMAT)
-    service = await wrapper_service.discover('sheets', 'v4')
+    service = await wrapper_service.discover('sheets', SHEETS_API_VERSION)
     table_values = [
         ['Отчёт от', current_time],
         ['Топ проектов по скорости закрытия'],
@@ -95,7 +85,7 @@ async def spreadsheets_update_value(
     await wrapper_service.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
-            range='A1:C100',
+            range=SHEET_RANGE,
             valueInputOption='USER_ENTERED',
             json=update_body
         )
