@@ -4,12 +4,12 @@ from aiogoogle import Aiogoogle
 
 from app.core.config import settings
 from app.extra.constants import (
-    COLUMN_COUNT,
     DRIVE_API_VERSION,
     FORMAT,
-    ROW_COUNT,
     SHEETS_API_VERSION,
-    SHEET_RANGE
+    SHEETS_COLUMN_COUNT,
+    SHEETS_RANGE,
+    SHEETS_ROW_COUNT,
 )
 
 
@@ -28,8 +28,8 @@ async def spreadsheets_create(wrapper_service: Aiogoogle) -> str:
                     'sheetId': 0,
                     'title': 'Текущие закрытые проекты',
                     'gridProperties': {
-                        'rowCount': ROW_COUNT,
-                        'columnCount': COLUMN_COUNT
+                        'rowCount': SHEETS_ROW_COUNT,
+                        'columnCount': SHEETS_COLUMN_COUNT
                     }
                 }
             }
@@ -85,7 +85,7 @@ async def spreadsheets_update_value(
     await wrapper_service.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
-            range=SHEET_RANGE,
+            range=SHEETS_RANGE,
             valueInputOption='USER_ENTERED',
             json=update_body
         )
