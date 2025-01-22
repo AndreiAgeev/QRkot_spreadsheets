@@ -63,8 +63,7 @@ async def delete_project(
     project = await check_project_exists(project_id, session)
     check_project_is_closed(project.fully_invested)
     check_project_has_investments(project.invested_amount)
-    project = await chartityproject_crud.remove(project, session)
-    return project
+    return await chartityproject_crud.remove(project, session)
 
 
 @router.patch(
@@ -84,9 +83,8 @@ async def update_project(
     check_new_data_for_update(
         update_data.full_amount, project.invested_amount
     )
-    project = await chartityproject_crud.update(
+    return await chartityproject_crud.update(
         project,
         update_data,
         session
     )
-    return project

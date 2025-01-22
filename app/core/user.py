@@ -10,6 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.db import get_async_session
+from app.extra.constants import (
+    JWTSTRATEGY_LIFETIME,
+    PASSWORD_LENGTH
+)
 from app.models import User
 
 
@@ -20,7 +24,7 @@ bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
 
 def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(settings.secret, 3600)
+    return JWTStrategy(settings.secret, JWTSTRATEGY_LIFETIME)
 
 
 auth_backend = AuthenticationBackend(
@@ -33,7 +37,7 @@ auth_backend = AuthenticationBackend(
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     async def validate_password(self, password, user):
-        if len(password) < 4:
+        if len(password) < PASSWORD_LENGTH:
             raise InvalidPasswordException(
                 reason='Password should be at least 4 characters'
             )
