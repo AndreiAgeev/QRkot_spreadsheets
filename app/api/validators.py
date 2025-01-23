@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import HTTPException
@@ -5,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charity_project import chartityproject_crud
 from app.extra import constants
-from app.extra.utils import now_iso
 from app.models import CharityProject
 from app.models.base import General
 
@@ -61,5 +61,5 @@ def check_new_data_for_update(full_amount: int, invested_amount: int):
 def check_obj_investments(obj: General):
     if obj.invested_amount == obj.full_amount:
         obj.fully_invested = True
-        obj.close_date = now_iso()
+        obj.close_date = datetime.now()
     return obj

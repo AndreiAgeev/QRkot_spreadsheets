@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .base import CRUDBase
 from app.models import CharityProject
-from app.extra.utils import timedelta
 
 
 class CharityProjectCRUD(CRUDBase):
@@ -69,10 +68,7 @@ class CharityProjectCRUD(CRUDBase):
         for project in query_result:
             obj = {
                 'name': project.name,
-                'timedelta': timedelta(
-                    project.close_date,
-                    project.create_date
-                ),
+                'timedelta': project.close_date - project.create_date,
                 'description': project.description
             }
             projects_list.append(obj)

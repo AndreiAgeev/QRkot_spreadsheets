@@ -49,7 +49,7 @@ async def set_user_permissions(
     permission_body = {
         'type': 'user',
         'role': 'writer',
-        'emailAddress': settings.user_email
+        'emailAddress': settings.email
     }
     await wrapper_service.as_service_account(
         service.permissions.create(

@@ -22,6 +22,7 @@ class CRUDBase:
             user: Optional[User] = None
     ):
         data = new_object.dict()
+        data['close_date'] = None
         if user is not None:
             data['user_id'] = user.id
         db_obj = self.model(**data)
