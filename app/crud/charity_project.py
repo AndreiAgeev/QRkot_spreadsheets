@@ -72,14 +72,6 @@ class CharityProjectCRUD(CRUDBase):
                 'description': project.description
             }
             projects_list.append(obj)
-        # Насколько я знаю, чтобы отсортировать по timdelta на уровне SQL,
-        # необходимо именно там вычислить это значение. Но в данном случае мы
-        # упираемся в то, что в SQLite даты представлены в виде строк - т.е.
-        # найти timedelta не получится. В документации SQLite есть упоминание
-        # функции timediff(), которая может вернуть что-то пподобное, пусть
-        # и вдругом формате, но при попытке её использования, SQLAlchemy
-        # сообщает, что такой функции нет в SQLite. Т.е. остаётся только
-        # вариант сортировки уже после получения результата запроса.
         projects_list.sort(key=itemgetter('timedelta'))
         return projects_list
 
