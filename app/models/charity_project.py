@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, Float, String, Text
 from sqlalchemy.orm import validates
 
 from .base import General
@@ -13,6 +13,7 @@ from app.extra.constants import (
 class CharityProject(General, Base):
     name = Column(String(PROJECT_NAME_MAX_LENGTH), nullable=False, unique=True)
     description = Column(Text, nullable=False)
+    timedelta = Column(Float)
 
     @validates('name')
     def validate_name(cls, key, value):

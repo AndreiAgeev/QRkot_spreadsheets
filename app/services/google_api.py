@@ -11,6 +11,7 @@ from app.extra.constants import (
     SHEETS_RANGE,
     SHEETS_ROW_COUNT,
 )
+from app.extra.utils import get_timedelta
 
 
 async def spreadsheets_create(wrapper_service: Aiogoogle) -> str:
@@ -75,7 +76,7 @@ async def spreadsheets_update_value(
     for project in projects_list:
         table_values.append(
             [project['name'],
-             str(project['timedelta']),
+             get_timedelta(project['timedelta']),
              project['description']]
         )
     update_body = {

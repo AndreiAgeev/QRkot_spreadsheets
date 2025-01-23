@@ -62,4 +62,7 @@ def check_obj_investments(obj: General):
     if obj.invested_amount == obj.full_amount:
         obj.fully_invested = True
         obj.close_date = datetime.now()
+        obj.timedelta = (
+            obj.close_date.timestamp() - obj.create_date.timestamp()
+        )
     return obj

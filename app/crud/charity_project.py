@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -55,24 +53,15 @@ class CharityProjectCRUD(CRUDBase):
         return db_obj
 
     async def get_projects_by_completion_rate(self, session: AsyncSession):
-        query_result = await session.execute(
+        projects_list = await session.execute(
             select(
                 CharityProject.name,
-                CharityProject.close_date,
-                CharityProject.create_date,
+                CharityProject.timedelta,
                 CharityProject.description,
             ).where(CharityProject.fully_invested == True) # noqa
+            .order_by(CharityProject.timedelta)
         )
-        query_result = query_result.all()
-        projects_list = list()
-        for project in query_result:
-            obj = {
-                'name': project.name,
-                'timedelta': project.close_date - project.create_date,
-                'description': project.description
-            }
-            projects_list.append(obj)
-        projects_list.sort(key=itemgetter('timedelta'))
+        projects_list = projects_list.all()
         return projects_list
 
 
